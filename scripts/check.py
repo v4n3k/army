@@ -53,7 +53,7 @@ def main() -> int:
         txt = h.read_text(encoding="utf-8", errors="ignore")
         for m in re.finditer(r'(?:src|href)="([^"]+)"', txt):
             u = m.group(1)
-            if u.startswith(SKIP):
+            if u.startswith(SKIP) or "'+" in u or "window." in u or "${" in u:
                 continue
             t = local_target(h.parent, u)
             if t is not None and not t.exists():
@@ -63,7 +63,7 @@ def main() -> int:
         txt = css.read_text(encoding="utf-8", errors="ignore")
         for m in re.finditer(r"url\((['\"]?)([^)'\"]+)\1\)", txt):
             u = m.group(2).strip()
-            if u.startswith(SKIP):
+            if u.startswith(SKIP) or "'+" in u or "window." in u or "${" in u:
                 continue
             t = local_target(css.parent, u)
             if t is not None and not t.exists():
