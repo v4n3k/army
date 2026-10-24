@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# /avito/ — рекламная посадка Авито (noindex). Обход YandexBot уходил на /avito/?aviclid=… почти целиком:
+# 06–10.10.2026 31–75 тыс. запросов в день против 185–790 к страницам сайта; Clean-param aviclid не помог.
+# Закрыто только для Яндекса (12.10.2026), чтобы не зацепить проверку посадки модерацией Авито.
+User-agent: Yandex
+Allow: /
+Disallow: /avito/
+
+# Метки трафика не создают новых страниц: без Clean-param Яндекс индексирует
+# один и тот же адрес с десятками хвостов и размывает по ним вес.
+Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content&yclid&gclid&_openstat&from&roistat&ysclid
+# aviclid — метка кликов Авито: на /avito/?aviclid=… уходило ~97% обхода YandexBot (лог 03.10);
+# utm_sourc — обрезанная метка, дубль главной в поиске (теперь ещё и 301 в nginx).
+Clean-param: aviclid&utm_referrer&utm_sourc
+
+Sitemap: https://armia-rf.ru/sitemap.xml

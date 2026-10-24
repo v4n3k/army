@@ -1,0 +1,180 @@
+:root{--bg:#fff;--soft:#F4F6F9;--ink:#111823;--ink2:#5A6675;--accent:#F26522;--accent2:#E1571A;--dark:#0B1522;--border:#E6E9EF;--radius:16px;--maxw:1080px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+p a,li a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+p a:hover,li a:hover{opacity:.8}
+img{max-width:100%;display:block}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+h1,h2,h3{line-height:1.15;letter-spacing:-.01em}
+/* header */
+.hdr{position:sticky;top:0;z-index:50;background:rgba(11,21,34,.96);backdrop-filter:blur(8px);color:#fff;border-bottom:1px solid rgba(255,255,255,.08)}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-weight:800;font-size:18px;letter-spacing:-.02em}
+.logo b{color:var(--accent)}
+.hdr .cta{background:var(--accent);color:#fff;padding:10px 18px;border-radius:10px;font-weight:700;font-size:14px}
+/* breadcrumbs */
+.crumbs{font-size:13px;color:var(--ink2);padding:16px 0}
+.crumbs a{color:var(--accent)}
+/* hero */
+.hero{background:linear-gradient(180deg,#0B1522,#122234);color:#fff;padding:44px 0 52px}
+.hero .wrap{max-width:760px}
+.hero h1{font-size:clamp(24px,3.6vw,34px);font-weight:800;margin-bottom:18px}
+.hero p.lead{color:#A9B6C6;font-size:clamp(15px,1.7vw,17px);line-height:1.65;border-left:3px solid var(--accent);padding-left:18px}
+.hero p.verified{margin-top:14px;padding-left:21px;font-size:13px;color:#7F8FA3;letter-spacing:.01em}
+.hero p.verified:before{content:"✓";color:var(--accent);font-weight:700;margin-right:7px}
+.hero .eyebrow{display:inline-block;background:rgba(242,101,34,.15);color:#F7A06A;font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:20px;margin-bottom:16px}
+/* payout cards */
+section{padding:clamp(40px,6vw,64px) 0}
+/* секции-ссылки идут подряд: полный отступ у каждой давал 128px пустоты между чипсами */
+
+/* Значки в шапке (ТГ, MAX, трубка) — один размер и одна форма.
+   Раньше размеры жили в inline-стилях: ТГ 36px перебивал медиа-запросы, картинка MAX
+   торчала из своего круга, у MAX был скруглённый квадрат вместо круга (Гриша 14.08). */
+.hdr .hicon{display:inline-flex;width:36px;height:36px;border-radius:50%;align-items:center;
+  justify-content:center;flex:none;overflow:hidden}
+.hdr .hicon svg{width:18px;height:18px}
+.hdr .hicon img{width:100%;height:100%;object-fit:cover;display:block}
+.linksec{padding:clamp(22px,3vw,32px) 0}
+.linksec+.linksec{padding-top:0}
+.h2{font-size:clamp(23px,3.4vw,34px);font-weight:800;margin-bottom:10px}
+.sub{color:var(--ink2);margin-bottom:28px;max-width:720px}
+.pay{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+/* ровная сетка по числу карточек: без одиночки во втором ряду (2 → 2, 3 → 3, 4 → 2×2, 5 → 3+2) */
+.pay:has(>:nth-child(2):last-child),.pay:has(>:nth-child(4):last-child){grid-template-columns:repeat(2,minmax(0,1fr))}
+.pay:has(>:nth-child(3):last-child){grid-template-columns:repeat(3,minmax(0,1fr))}
+.pay:has(>:nth-child(5):last-child){grid-template-columns:repeat(6,minmax(0,1fr))}
+.pay:has(>:nth-child(5):last-child)>*{grid-column:span 2}
+.pay:has(>:nth-child(5):last-child)>:nth-child(n+4){grid-column:span 3}
+@media(max-width:900px){.pay:has(>:nth-child(3):last-child),.pay:has(>:nth-child(5):last-child){grid-template-columns:repeat(2,minmax(0,1fr))}.pay:has(>:nth-child(5):last-child)>*{grid-column:auto!important}.pay:has(>:nth-child(3):last-child)>:last-child,.pay:has(>:nth-child(5):last-child)>:last-child{grid-column:1/-1!important}}
+@media(max-width:560px){.pay{grid-template-columns:1fr!important}.pay>*{grid-column:auto!important}}
+.paycard{background:var(--soft);border:1px solid var(--border);border-radius:var(--radius);padding:24px;container-type:inline-size;min-width:0}
+.paycard .lbl{font-size:13px;color:var(--ink2);font-weight:600;margin-bottom:8px}
+.paycard .val{font-size:clamp(22px,2.6vw,32px);font-weight:800;color:var(--ink);line-height:1.2}
+/* сумма целиком в одну строку: кегль от ширины карточки, «₽» не отрывается от числа */
+@supports (font-size:1cqi){.paycard .val{font-size:clamp(18px,10.5cqi,34px)}}
+.paycard .val:not([style*="font-size"]){white-space:nowrap}
+.paycard.accent{background:linear-gradient(135deg,#F26522,#E1571A);border:none;color:#fff}
+.paycard.accent .lbl,.paycard.accent .val{color:#fff}
+.paycard .note{font-size:12px;color:var(--ink2);margin-top:8px}
+.paycard.accent .note{color:rgba(255,255,255,.85)}
+.datenote{font-size:13px;color:var(--ink2);margin-top:16px;padding:10px 14px;background:#FFF7F2;border-left:3px solid var(--accent);border-radius:8px}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;counter-reset:s}
+.step{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:22px;position:relative}
+.step::before{counter-increment:s;content:counter(s);display:flex;align-items:center;justify-content:center;width:34px;height:34px;background:var(--accent);color:#fff;border-radius:9px;font-weight:800;margin-bottom:12px}
+.step h3{font-size:17px;margin-bottom:6px}
+.step p{color:var(--ink2);font-size:15px}
+/* form */
+.leadwrap{background:linear-gradient(135deg,#0B1522,#16283e);border-radius:20px;padding:clamp(24px,4vw,40px);color:#fff}
+.leadwrap h2{font-size:clamp(22px,3vw,30px);font-weight:800;margin-bottom:8px}
+.leadwrap p{color:#B9C4D2;margin-bottom:22px}
+.lead-form{display:grid;gap:12px;max-width:440px}
+.lead-form input{padding:14px 16px;border-radius:11px;border:1px solid #2a3b52;background:#0e1c2e;color:#fff;font-size:15px}
+.lead-form input::placeholder{color:#7889a0}
+.lead-form button{background:var(--accent);color:#fff;border:none;padding:15px;border-radius:11px;font-weight:800;font-size:16px;cursor:pointer}
+.lead-form button:hover{background:var(--accent2)}
+.lead-form .pdn{font-size:12px;color:#8496ad;display:flex;gap:8px;align-items:flex-start}
+/* faq */
+.faq details{border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.faq summary{padding:16px 20px;font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--accent);font-weight:800;font-size:20px}
+.faq details[open] summary::after{content:"–"}
+.faq .body{padding:0 20px 18px;color:var(--ink2)}
+/* geo links */
+.geolinks{display:flex;flex-wrap:wrap;gap:8px}
+.geolinks a{background:var(--soft);border:1px solid var(--border);border-radius:9px;padding:9px 14px;font-size:14px;font-weight:600}
+.geolinks a:hover{border-color:var(--accent);color:var(--accent)}
+/* footer */
+.ftr{background:#0B1522;color:#8496ad;padding:34px 0;font-size:13px}
+.ftr .disc{border:1px solid #22344a;border-radius:10px;padding:14px 16px;margin-bottom:16px;color:#a9b6c7}
+.ftr a{color:#B9C4D2}
+
+.tblwrap{overflow-x:auto;margin:0 0 20px;-webkit-overflow-scrolling:touch}
+.tbl{width:100%;border-collapse:collapse;font-size:14.5px;line-height:1.5;table-layout:fixed}
+.tbl th{background:var(--dark);color:#fff;text-align:left;padding:12px 14px;font-weight:700;font-size:13.5px;letter-spacing:.01em}
+.tbl td{padding:12px 14px;border-bottom:1px solid var(--border);color:var(--ink2);vertical-align:top;overflow-wrap:anywhere}
+.tbl tr:nth-child(even) td{background:var(--soft)}
+.tbl td:first-child{font-weight:700;color:var(--ink)}
+.tbl th:nth-child(1),.tbl td:nth-child(1){width:26%}
+.tbl th:nth-child(2),.tbl td:nth-child(2){width:37%}
+.tbl th:nth-child(3),.tbl td:nth-child(3){width:37%}
+@media(max-width:760px){
+  .tbl,.tbl thead,.tbl tbody,.tbl tr,.tbl th,.tbl td{display:block;width:auto}
+  .tbl thead{display:none}
+  .tbl tr{border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden}
+  .tbl tr:nth-child(even) td{background:transparent}
+  .tbl td{border-bottom:1px solid var(--border);padding:11px 14px}
+  .tbl td:last-child{border-bottom:0}
+  .tbl td:first-child{background:var(--soft);font-size:15px}
+  .tbl td:not(:first-child)::before{content:attr(data-th);display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2);opacity:.75;margin-bottom:4px;font-weight:700}
+}
+
+/* Таблицы на телефоне (аудит M-37, 15.10). Длинные слова («Единовременная», «Региональная»)
+   не переносились, и таблица была шире экрана: на 390px за правым краем оставались «Итого»
+   и «Служба по контракту» — на 47 страницах. Переносы по слогам — только на узких экранах,
+   десктоп не трогаем. */
+@media(max-width:760px){td,th{-webkit-hyphens:auto;hyphens:auto}}
+/* Подсказка прокрутки: тень у края, за которым есть ещё колонки. Белые «шторки» (local)
+   едут вместе с таблицей и закрывают тень, когда край достигнут, поэтому у таблиц, которые
+   влезают, тени нет ни на телефоне, ни на десктопе. Обёртки таблиц — с inline overflow-x:auto
+   (хабы, выплаты, сравнение) и .w-nis-twrap (калькулятор ипотеки). */
+div[style*="overflow-x:auto"]:has(>table),.w-nis-twrap{
+  background:
+    linear-gradient(90deg,#fff 14px,rgba(255,255,255,0)) 0 0/40px 100% no-repeat local,
+    linear-gradient(270deg,#fff 14px,rgba(255,255,255,0)) 100% 0/40px 100% no-repeat local,
+    linear-gradient(90deg,rgba(11,21,34,.2),rgba(11,21,34,0)) 0 0/14px 100% no-repeat scroll,
+    linear-gradient(270deg,rgba(11,21,34,.2),rgba(11,21,34,0)) 100% 0/14px 100% no-repeat scroll;
+  background-color:#fff}
+
+/* Мобильная шапка. Логотип + телефон + 2 иконки + кнопка не влезали в 375px: строка была
+   шириной 496px, и главная кнопка «Оставить заявку» уезжала за правый край экрана —
+   на всех гео-страницах, то есть на всём мобильном трафике из поиска. */
+@media(max-width:560px){
+  .hdr .wrap{gap:8px;padding-left:12px;padding-right:12px;height:56px}
+  /* логотип ломался на две строки и раздувал шапку вдвое (Гриша, iPhone 14.08) */
+  .hdr .logo a{font-size:15px;white-space:nowrap}
+  .hdr .cta{padding:9px 12px;font-size:13px;white-space:nowrap;flex:none}
+  .hdr a[href^="tel:"] span{display:none}          /* оставляем только трубку-иконку */
+  .hdr a[href^="tel:"]{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.12);justify-content:center;gap:0}
+  .hdr a[href^="tel:"] svg{width:18px;height:18px}
+}
+@media(max-width:430px){
+  .hdr .wrap{gap:6px;padding-left:10px;padding-right:10px}
+  .hdr .logo a{font-size:13.5px}
+  /* «Оставить заявку» не влезало и обрезалось на пол-слова: на узких — короткий текст */
+  .hdr .cta{padding:8px 12px;font-size:0}
+  .hdr .cta::after{content:"Заявка";font-size:13px;font-weight:700}
+  .hdr a[href^="tel:"],.hdr .hicon{width:34px;height:34px}
+  .hdr .hicon svg,.hdr a[href^="tel:"] svg{width:17px;height:17px}
+  .hdr .wrap>div:last-child{gap:7px!important}
+}
+@media(max-width:370px){
+  /* совсем узкие: трубку убираем — звонок остаётся в теле страницы и в футере,
+     а кнопка заявки важнее и должна помещаться целиком */
+  .hdr a[href^="tel:"]{display:none}
+  .hdr .logo a{font-size:13.5px}
+}
+/* каталог вакансий (18.10): фильтр-чипсы без JS, карточки, «Коротко о вакансии» */
+.vf{position:relative}
+.vf>input{position:absolute;opacity:0;width:1px;height:1px}
+.vf>label{display:inline-block;padding:8px 14px;border-radius:999px;background:var(--soft);margin:0 6px 8px 0;cursor:pointer;font-weight:700;font-size:14px}
+.vf>input:checked+label{background:var(--accent);color:#fff}
+.vf>input:focus-visible+label{outline:2px solid var(--accent);outline-offset:2px}
+.vnote{font-size:13px;color:var(--ink2);margin:4px 0 18px}
+.vcat{margin-top:26px;scroll-margin-top:80px}
+.vcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;list-style:none;padding:0;margin:12px 0}
+.vc{background:var(--soft);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--ink2)}
+.vc-t{font-weight:800;font-size:16px;color:var(--ink)}
+.vc-p,.vc-b{font-weight:700;color:var(--ink)}
+.vc-b{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--accent)}
+.vmore{display:inline-block;margin:2px 0 8px;color:var(--accent);font-weight:700}
+.vshort{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:8px 16px;background:var(--soft);border-radius:12px;padding:16px 18px;margin:20px 0 6px}
+.vshort dt{font-weight:700;color:var(--ink)}
+.vshort dd{color:var(--ink2)}
+.vshort dd a,.vcat p a,.vrow a{color:var(--accent)}
+@media(max-width:560px){.vshort{grid-template-columns:1fr}.vshort dd{margin-bottom:6px}}
+.vrow{margin:0 0 10px;color:var(--ink2)}
+.vrow b{color:var(--ink)}
