@@ -13,9 +13,9 @@
 (function () {
   "use strict";
 
-  var SEO_TG_BOT = 'https://t.me/armia_rf_bot';
+  var SEO_TG_BOT = 'https://t.me/army_rf_contract_bot';
   var SEO_MAX_BOT = 'https://max.ru/id525632714622_1_bot';
-  var FUNNEL_TG = 'https://t.me/SVO_army_bot';
+  var FUNNEL_TG = 'https://t.me/army_rf_contract_bot';
   var MAX_BOTS = {sam: 'se13478217_1_bot', st: 'id525632714622_bot',
                   t: 'se13478217_bot', g: 'id744517437230_4_bot'};
   var PHONE_ZAKUP = {href: 'tel:+79603545277', text: '+7 (960) 354-52-77'};
@@ -91,7 +91,7 @@
     for (i = 0; i < links.length; i++) {
       a = links[i];
       href = a.getAttribute('href') || '';
-      if (/t\.me\/(armia_rf_bot|SVO_army_bot)/i.test(href)) a.setAttribute('href', tg);
+      if (/^https?:\/\/t\.me\//i.test(href)) a.setAttribute('href', tg);
       // max.ru/join/… — это каналы админов в формах, их не трогаем
       else if (/max\.ru\//i.test(href) && !/max\.ru\/join\//i.test(href)) a.setAttribute('href', mx);
       else if (mark && /^tel:/i.test(href)) {
