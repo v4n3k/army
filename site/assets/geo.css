@@ -60,7 +60,7 @@ section{padding:clamp(40px,6vw,64px) 0}
 .paycard.accent .lbl,.paycard.accent .val{color:#fff}
 .paycard .note{font-size:12px;color:var(--ink2);margin-top:8px}
 .paycard.accent .note{color:rgba(255,255,255,.85)}
-.datenote{font-size:13px;color:var(--ink2);margin-top:16px;padding:10px 14px;background:#f4f6f2;border-left:3px solid var(--gold);border-radius:8px}
+.datenote{font-size:13px;color:var(--ink2);margin-top:16px;padding:10px 14px;background:#f4f6f2;border-left:3px solid var(--border);border-radius:8px}
 /* steps */
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;counter-reset:s}
 .step{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:22px;position:relative;box-shadow:0 8px 20px -14px rgba(15,36,29,.2)}
@@ -159,13 +159,8 @@ div[style*="overflow-x:auto"]:has(>table),.w-nis-twrap{
   .hdr .logo a{font-size:13.5px}
 }
 /* каталог вакансий (18.10): фильтр-чипсы без JS, карточки, «Коротко о вакансии» */
-.vf{position:relative}
-.vf>input{position:absolute;opacity:0;width:1px;height:1px}
-.vf>label{display:inline-block;padding:8px 14px;border-radius:999px;background:var(--soft);margin:0 6px 8px 0;cursor:pointer;font-weight:700;font-size:14px}
-.vf>input:checked+label{background:var(--accent);color:#fff}
-.vf>input:focus-visible+label{outline:2px solid var(--accent);outline-offset:2px}
 .vnote{font-size:13px;color:var(--ink2);margin:4px 0 18px}
-.vcat{margin-top:26px;scroll-margin-top:80px}
+.vcat{margin-top:26px;scroll-margin-top:130px}
 .vcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;list-style:none;padding:0;margin:12px 0}
 .vc{background:var(--soft);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--ink2)}
 .vc-t{font-weight:800;font-size:16px;color:var(--ink)}
@@ -191,7 +186,7 @@ section + section{border-top:1px solid var(--border)}
 .logo b{color:#e8d48a}
 /* бейдж герой-блока: золотая плашка вместо зелёной */
 .hero .eyebrow{background:rgba(201,162,39,.1);border:1px solid rgba(201,162,39,.45);color:#e8d48a;border-radius:6px}
-.hero p.lead{border-left:3px solid var(--gold)}
+.hero p.lead{border-left:3px solid var(--border)}
 /* FAQ как на главной: золотая риска слева, без мыльных теней */
 .faq details{background:#fff;border:1px solid var(--border);border-left:3px solid rgba(201,162,39,.65);border-radius:8px;box-shadow:none}
 .faq details[open]{border-color:rgba(201,162,39,.8)}
@@ -213,8 +208,8 @@ section + section{border-top:1px solid var(--border)}
 .doc-rows{margin-top:26px;text-align:left;border-top:1px solid var(--border)}
 .drow{display:grid;grid-template-columns:auto minmax(0,1.05fr) minmax(0,1fr);gap:14px 36px;align-items:center;padding:24px 4px;border-bottom:1px solid var(--border);transition:.2s}
 .drow:hover{background:linear-gradient(90deg,rgba(201,162,39,.06),rgba(201,162,39,0) 55%)}
-.dn{position:relative;padding-left:16px;font-family:'Oswald','Onest',system-ui,sans-serif;font-weight:600;font-size:15px;letter-spacing:.06em;color:#a8841d}
-.dn::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);width:9px;height:2px;background:var(--gold)}
+.dn{font-family:'Oswald','Onest',system-ui,sans-serif;font-weight:600;font-size:15px;letter-spacing:.06em;color:#a8841d}
+
 .drow h3{font-weight:600;font-size:19px;margin:0 0 6px}
 .drow p{color:var(--ink2);font-size:14.5px;margin:0}
 .dq{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:flex-end}
@@ -255,5 +250,56 @@ section + section{border-top:1px solid var(--border)}
 
 
 /* калькулятор: поле выбора региона */
-select#reg{border-radius:8px;padding:14px 16px;border:1.5px solid var(--border);background:#fff;font-size:16px;margin-bottom:20px;cursor:pointer}
+select#reg{border-radius:8px;padding:14px 44px 14px 16px;border:1.5px solid var(--border);background:#fff;font-size:16px;margin-bottom:20px;cursor:pointer;appearance:none;-webkit-appearance:none;-moz-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235a6650' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
 select#reg:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,107,63,.15)}
+/* BASE v2.3 — липкая навигация по странице, плитки в hero, формула выплаты, города-карточки */
+.pnav{position:sticky;top:64px;z-index:40;background:var(--bg);border-bottom:1px solid var(--border);box-shadow:0 12px 20px -18px rgba(20,38,26,.55)}
+.pnav .wrap{display:flex;gap:8px;overflow-x:auto;padding-top:9px;padding-bottom:9px;scrollbar-width:none}
+.pnav .wrap::-webkit-scrollbar{display:none}
+.pnav a{flex:none;font-size:13px;font-weight:700;color:var(--ink2);background:var(--soft);border:1px solid var(--border);border-radius:20px;padding:7px 14px;text-decoration:none;line-height:1.4}
+.pnav a:hover{color:var(--dark);border-color:var(--gold)}
+.pnav a.act{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pnav a.act:hover{color:#fff}
+@media(max-width:560px){.pnav{top:56px}}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 16px}
+.hstat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:10px 14px}
+.hstat .lbl{font-size:11px;color:#b9cabd;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
+.hstat .val{font-family:'Oswald','Onest',system-ui,sans-serif;font-size:21px;font-weight:800;color:#fff;line-height:1.2}
+.hstat .note{font-size:12px;color:#aebfae;margin-top:3px}
+@media(max-width:900px){.hero-stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:430px){.hero-stats{grid-template-columns:1fr}}
+.fband{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;background:var(--soft);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:8px;padding:13px 18px;margin:0 0 16px}
+.fband .part b{display:block;font-family:'Oswald','Onest',system-ui,sans-serif;font-size:20px;font-weight:800;color:var(--dark);letter-spacing:.01em;white-space:nowrap}
+.fband .part i{display:block;font-style:normal;font-size:12px;color:var(--ink2);margin-top:2px}
+.fband .op{font-weight:800;font-size:18px;color:var(--ink2)}
+.cybands{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin:0 0 16px}
+.cyb{display:flex;gap:12px;align-items:baseline;background:var(--soft);border:1px solid var(--border);border-radius:8px;padding:9px 13px}
+.cyb .cv{font-family:'Oswald','Onest',system-ui,sans-serif;font-weight:800;font-size:16px;color:var(--ink);white-space:nowrap}
+.cyb .cc{font-size:13.5px;color:var(--ink2);line-height:1.45}
+/* 5-колоночная таблица «ориентиры»: реальные ширины колонок вместо 3-колоночных */
+.tbl.w5 th:nth-child(1),.tbl.w5 td:nth-child(1){width:15%}
+.tbl.w5 th:nth-child(2),.tbl.w5 td:nth-child(2){width:33%}
+.tbl.w5 th:nth-child(3),.tbl.w5 td:nth-child(3){width:16%}
+.tbl.w5 th:nth-child(4),.tbl.w5 td:nth-child(4){width:18%}
+.tbl.w5 th:nth-child(5),.tbl.w5 td:nth-child(5){width:18%}
+.tbl.w5 th,.tbl.w5 td{padding:10px 12px}
+/* BASE v2.4 — панель-калькулятор с диаграммой результата */
+.calcbox{background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:20px 20px 22px;box-shadow:0 20px 40px -26px rgba(20,38,26,.4)}
+.calcbox .datenote{margin-top:14px}
+.calc-rows{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 14px}
+.calc-rows .row{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 13px}
+.calc-rows .row i{display:block;font-style:normal;font-size:11.5px;color:var(--ink2)}
+.calc-rows .row b{display:block;font-family:'Oswald','Onest',system-ui,sans-serif;font-size:18px;font-weight:800;color:var(--ink);line-height:1.2;margin:3px 0 2px}
+.calc-total{border-top:1px solid var(--border);padding-top:14px}
+.calc-total .lbl{font-size:12.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin-bottom:4px}
+.calc-total .gval{font-family:'Oswald','Onest',system-ui,sans-serif;font-size:clamp(30px,4.2vw,42px);font-weight:800;color:var(--accent2);line-height:1.05}
+/* BASE v2.5 — двухколоночный hero: фактовая карточка вместо простыни-lead */
+.hero-grid .hero-cols{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:24px 40px;align-items:start}
+.hero-note{color:#c9d6cd;font-size:15px;line-height:1.55;margin:0 0 14px}
+.hero-facts{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:18px 20px 16px}
+.hero-facts .hf-title{font-family:'Oswald','Onest',system-ui,sans-serif;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:12px}
+.hero-facts ul{list-style:none;margin:0;padding:0}
+.hero-facts li{position:relative;padding-left:17px;color:#dbe7dd;font-size:14.5px;margin-bottom:8px;line-height:1.45}
+.hero-facts li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--gold)}
+.hero-facts .hf-foot{border-top:1px solid rgba(255,255,255,.12);margin-top:10px;padding-top:12px;color:#c9d6cd;font-size:13px;line-height:1.5}
+@media(max-width:900px){.hero-grid .hero-cols{grid-template-columns:1fr;gap:16px}}
