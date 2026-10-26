@@ -213,10 +213,9 @@
 			<div class="crumbs">
 				<a href="../index.html">Главная</a> → Калькулятор выплат
 			</div>
-		</div>
+		</div><nav class="pnav" aria-label="Состав страницы"><div class="wrap"><a href="#calculator">Калькулятор</a><a href="#sostav-vyplaty">Состав выплаты</a><a href="#monthly-salary">В месяц</a><a href="#how-to">Как считать</a><a href="#regions-top">Топ-10 регионов</a><a href="#nis">Военная ипотека</a><a href="#factors">Что влияет</a><a href="#faq">Вопросы</a><a href="#service-regions">По регионам</a></div></nav>
 		<section class="hero">
 			<div class="wrap">
-				<span class="eyebrow">Калькулятор · 2026</span>
 				<h1>Калькулятор выплат за контракт</h1>
 				<p class="lead">
 					Единовременная выплата = федеральная 400 000 ₽ + региональная
@@ -224,8 +223,7 @@
 				</p>
 			</div>
 		</section>
-		<section>
-			<div class="wrap" style="max-width: 640px">
+		<section id="calculator" style="scroll-margin-top:130px"><div class="wrap" style="max-width: 640px"><div class="calcbox">
 				<label style="font-weight: 700; display: block; margin-bottom: 8px"
 					>Регион</label
 				>
@@ -233,7 +231,7 @@
 					id="reg"
 					style="
 						width: 100%;
-						padding: 14px 16px;
+						padding: 14px 44px 14px 16px;
 						border-radius: 11px;
 						border: 1px solid var(--border);
 						font-size: 16px;
@@ -429,31 +427,7 @@
 						Анадырь
 					</option>
 				</select>
-				<div class="pay">
-					<div class="paycard">
-						<div class="lbl">Федеральная выплата</div>
-						<div class="val">400 000 ₽</div>
-						<div class="note">Указ №644</div>
-					</div>
-					<div class="paycard">
-						<div class="lbl">Региональная выплата</div>
-						<div class="val" id="regv">—</div>
-						<div class="note">по выбранному региону</div>
-					</div>
-					<div class="paycard accent">
-						<div class="lbl">Итого единовременно</div>
-						<div class="val" id="totv">—</div>
-						<div class="note">Ориентировочно</div>
-					</div>
-				</div>
-				<div class="pay" style="margin-top: 14px">
-					<div class="paycard">
-						<div class="lbl">Ежемесячное довольствие</div>
-						<div class="val" id="zpv">—</div>
-						<div class="note">выплачивается каждый месяц</div>
-					</div>
-				</div>
-				<div class="datenote">
+				<div class="calc-rows"><div class="row"><i>Федеральная выплата</i><b>400 000 ₽</b><i>Указ №644</i></div><div class="row"><i>Региональная выплата</i><b id="regv">—</b><i>по выбранному региону</i></div><div class="row"><i>Довольствие в месяц</i><b id="zpv">—</b><i>выплачивается каждый месяц</i></div></div><div class="calc-total"><div class="lbl">Итого единовременно при подписании</div><div class="gval" id="totv">—</div></div><div class="datenote">
 					Расчёт ориентировочный, по данным на июль 2026. Актуальную сумму и все
 					доплаты уточняйте у специалиста.
 				</div>
@@ -471,7 +445,7 @@
 						"
 						>Рассчитать точно и оставить заявку →</a
 					>
-				</div>
+				</div></div>
 			</div>
 		</section>
 		<script>
@@ -505,9 +479,7 @@
 		</script>
 		<section class="article">
 			<div class="wrap" style="max-width: 760px">
-				<h2 class="h2" style="margin-top: 32px">
-					Из чего складывается выплата за контракт
-				</h2>
+				<h2 class="h2" id="sostav-vyplaty" style="margin-top:32px;scroll-margin-top:130px">Из чего складывается выплата за контракт</h2>
 				<p>Итоговая сумма при подписании контракта состоит из трёх частей.</p>
 				<div class="stepslist">
 					<div class="stepsitem">
@@ -552,9 +524,7 @@
 					считайте как единовременную выплату плюс двенадцать месяцев
 					довольствия.
 				</div>
-				<h2 class="h2" style="margin-top: 32px">
-					Зарплата военнослужащего по контракту: как считается месячная сумма
-				</h2>
+				<h2 class="h2" id="monthly-salary" style="margin-top:32px;scroll-margin-top:130px">Зарплата военнослужащего по контракту: как считается месячная сумма</h2>
 				<p>
 					Зарплатой военнослужащего в обиходе называют денежное довольствие: за
 					запросом «калькулятор зп военнослужащих» чаще всего стоит именно
@@ -569,16 +539,13 @@
 					ним прибавляются надбавки за выслугу лет, классную квалификацию и
 					особые условия службы. Поэтому у двух контрактников с одинаковым
 					званием итоговые суммы отличаются: разница в должности, выслуге и
-					характере задач.
-				</p>
+					характере задач.</p><div class="fband"><div class="part"><b>Оклад по званию</b><i>зависит от конкретного звания</i></div><span class="op">+</span><div class="part"><b>Оклад по должности</b><i>зависит от должности</i></div><span class="op">+</span><div class="part"><b>Надбавки</b><i>выслуга, классность, особые условия</i></div><span class="op">=</span><div class="part"><b>от 220 000 ₽</b><i>довольствие в месяц, ст. 2 № 306-ФЗ</i></div></div>
 				<p>
 					Формула закреплена статьёй 2 закона № 306-ФЗ: складываются два оклада, у каждой надбавки — свой процент. Чтобы прикинуть доход за
 					первый год, умножьте месячную сумму на двенадцать и прибавьте
 					единовременную выплату своего региона.
 				</p>
-				<h2 class="h2" style="margin-top: 32px">
-					Как пользоваться калькулятором
-				</h2>
+				<h2 class="h2" id="how-to" style="margin-top:32px;scroll-margin-top:130px">Как пользоваться калькулятором</h2>
 				<p>
 					Перед расчётом достаточно знать регион, в котором планируете
 					подписывать контракт. Если рассматриваете несколько субъектов,
@@ -622,9 +589,7 @@
 					заключения контракта, где-то действуют требования к регистрации. Эти
 					детали стоит уточнить до подписания.
 				</p>
-				<h2 class="h2" style="margin-top: 32px">
-					Топ-10 регионов по выплатам за контракт в 2026 году
-				</h2>
+				<h2 class="h2" id="regions-top" style="margin-top:32px;scroll-margin-top:130px">Топ-10 регионов по выплатам за контракт в 2026 году</h2>
 				<p>
 					Итог — сумма региональной части и федеральных 400 000 ₽, без учёта
 					денежного довольствия. Данные на июль 2026.
@@ -694,9 +659,7 @@
 						</tbody>
 					</table>
 				</div>
-				<h2 class="h2" style="margin-top: 32px">
-					Военная ипотека: сколько накопится за время службы
-				</h2>
+				<h2 class="h2" id="nis" style="margin-top:32px;scroll-margin-top:130px">Военная ипотека: сколько накопится за время службы</h2>
 				<p>
 					Единовременные выплаты — не единственный финансовый инструмент
 					контракта. Участнику накопительно-ипотечной системы (НИС) государство
@@ -713,9 +676,7 @@
 					категории военнослужащего. Подробный разбор условий — на странице
 					<a href="../voennaya-ipoteka/index.html">военная ипотека</a>.
 				</p>
-				<h2 class="h2" style="margin-top: 32px">
-					Что ещё влияет на итоговую сумму
-				</h2>
+				<h2 class="h2" id="factors" style="margin-top:32px;scroll-margin-top:130px">Что ещё влияет на итоговую сумму</h2>
 				<p>
 					Калькулятор показывает базовый расчёт по действующим документам. На
 					фактическую сумму влияют условия конкретного регионального указа и
@@ -746,7 +707,7 @@
 						</li>
 					</ul>
 				</div>
-				<h2 class="h2" style="margin-top: 32px">Частые вопросы о расчёте</h2>
+				<h2 class="h2" id="faq" style="margin-top:32px;scroll-margin-top:130px">Частые вопросы о расчёте</h2>
 				<div class="faq">
 					<details class="faq-item">
 						<summary>
@@ -1275,9 +1236,7 @@
 				f();
 			})();
 		</script>
-		<section style="background: var(--soft)">
-			<div class="wrap">
-				<h2 class="h2">Служба по контракту по регионам</h2>
+		<section id="service-regions" style="background:var(--soft);scroll-margin-top:130px"><div class="wrap"><h2 class="h2">Служба по контракту по регионам</h2>
 				<div class="chiprow">
 					<a class="chip" href="../vyplaty/index.html">Москва</a
 					><a class="chip" href="../vyplaty/index.html">Санкт-Петербург</a
@@ -1376,11 +1335,7 @@
 					обновляются — актуальные данные уточняйте у специалиста или в пункте
 					отбора.
 				</div>
-				<a href="../index.html">← На главную</a> ·
-				<a href="../kontrakt-na-svo/index.html">Как подписать контракт</a> ·
-				Виды контрактов · <a href="../voprosy/index.html">Вопросы и ответы</a> ·
-				<a href="index.html">Калькулятор выплат</a> ·
-				<a href="../privacy/index.html">Политика конфиденциальности</a>
+				<a href="../index.html">← На главную</a> · <a href="../kontrakt-na-svo/index.html">Как подписать контракт</a> · <a href="../voprosy/index.html">Вопросы и ответы</a> · <a href="../privacy/index.html">Политика конфиденциальности</a>
 			</div>
 		</footer>
 		<div
@@ -1436,5 +1391,6 @@
 					document.getElementById('ck-note').style.display = 'block';
 			} catch (e) {}
 		</script>
-	</body>
+	<script src="../assets/geonav.js" defer></script>
+</body>
 </html>
