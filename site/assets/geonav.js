@@ -47,3 +47,19 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
+
+/* авто-раскрытие <details> при переходе по якорю (карточка вопросов) */
+function geonavOpenDetails(hash) {
+  try {
+    var el = document.getElementById(decodeURIComponent((hash || '').slice(1)));
+    if (el) {
+      var d = el.tagName === 'DETAILS' ? el : el.closest('details');
+      if (d) d.open = true;
+    }
+  } catch (e) {}
+}
+document.addEventListener('click', function (e) {
+  var a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
+  if (a) geonavOpenDetails(a.getAttribute('href'));
+});
+window.addEventListener('load', function () { geonavOpenDetails(location.hash); });

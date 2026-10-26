@@ -302,6 +302,9 @@ select#reg:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rg
 .hero-facts li{position:relative;padding-left:17px;color:#dbe7dd;font-size:14.5px;margin-bottom:8px;line-height:1.45}
 .hero-facts li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--gold)}
 .hero-facts .hf-foot{border-top:1px solid rgba(255,255,255,.12);margin-top:10px;padding-top:12px;color:#c9d6cd;font-size:13px;line-height:1.5}
+.hero-facts a{color:#fff;text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(255,255,255,.4)}
+.hero-facts a:hover{color:#fff;text-decoration-color:#fff}
+.hero-facts li b{color:#fff;font-weight:800}
 @media(max-width:900px){.hero-grid .hero-cols{grid-template-columns:1fr;gap:16px}}
 
 /* BASE v2.6 — блок «Почему нам можно доверять» → единый пронумерованный реестр */
@@ -311,3 +314,4 @@ select#reg:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rg
 .tr .hd{font-weight:800;font-size:15px;margin-bottom:3px}
 .tr p{margin:0;color:var(--ink2);font-size:14.5px;line-height:1.5}
 @media(min-width:860px){.trust{grid-template-columns:1fr 1fr}.tr:nth-child(3){grid-column:1/-1}}
+.faq-item{scroll-margin-top:130px}
