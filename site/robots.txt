@@ -15,4 +15,4 @@ Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content&yclid&gclid
 # utm_sourc — обрезанная метка, дубль главной в поиске (теперь ещё и 301 в nginx).
 Clean-param: aviclid&utm_referrer&utm_sourc
 
-Sitemap: https://armia-rf.ru/sitemap.xml
+Sitemap: https://voenny-kontrakt.ru/sitemap.xml
