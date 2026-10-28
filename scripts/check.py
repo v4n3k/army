@@ -38,7 +38,7 @@ def main() -> int:
         urls = re.findall(r"<loc>(.*?)</loc>", sitemap.read_text(encoding="utf-8"))
         missing = []
         for u in urls:
-            p = u.replace("https://armia-rf.ru", "").strip("/")
+            p = u.replace("https://voenny-kontrakt.ru", "").strip("/")
             f = (ROOT / p / "index.html") if p else (ROOT / "index.html")
             if not f.is_file():
                 missing.append(u)
