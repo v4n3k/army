@@ -14,7 +14,7 @@
   "use strict";
 
   var SEO_TG_BOT = 'https://t.me/army_rf_contract_bot';
-  var SEO_MAX_BOT = 'https://max.ru/id525632714622_1_bot';
+  var SEO_MAX_BOT = 'https://max.ru/u/f9LHodD0cOLynKOTywwYfeVLBCWSVvoE4l4Nc1nsut5b_2r8xqdPkv2WYSI';
   var FUNNEL_TG = 'https://t.me/army_rf_contract_bot';
   var MAX_BOTS = {sam: 'se13478217_1_bot', st: 'id525632714622_bot',
                   t: 'se13478217_bot', g: 'id744517437230_4_bot'};
