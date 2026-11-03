@@ -122,6 +122,22 @@ class Handler(SimpleHTTPRequestHandler):
             return
         super().do_GET()
 
+    def send_error(self, code, message=None, explain=None) -> None:
+        if code == 404:
+            not_found = SITE / "404.html"
+            if not_found.is_file():
+                try:
+                    body = not_found.read_bytes()
+                except OSError:
+                    body = b""
+                if body:
+                    self.send_response(404)
+                    self.send_header("Content-Type", "text/html; charset=utf-8")
+                    self.send_header("Content-Length", str(len(body)))
+                    self.end_headers()
+                    self.wfile.write(body)
+                    return
+        super().send_error(code, message, explain)
     def do_POST(self) -> None:
         if self.path.split("?")[0] != "/api/lead":
             self.send_json({"ok": False, "error": "not found"}, status=404)
