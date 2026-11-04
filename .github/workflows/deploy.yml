@@ -1,0 +1,50 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # ручной запуск из вкладки Actions
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false # деплои идут по очереди, не рвут друг друга
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # нужно, чтобы увидеть, менялся ли server/
+
+      - name: Настройка SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Деплой статики (site/)
+        run: |
+          rsync -az --delete \
+            site/ \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}/"
+
+      - name: Деплой бэкенда (server/app.py) — только если менялся
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep -q '^server/'; then
+            rsync -az server/app.py \
+              "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/project/app/app.py"
+            ssh "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+              'systemctl restart leadserver && sleep 2 && systemctl is-active leadserver'
+            echo "server/ менялся — app.py обновлён, leadserver перезапущен"
+          else
+            echo "server/ не менялся — пропускаю"
+          fi
+
+      - name: Проверка после деплоя
+        run: |
+          sleep 2
+          curl -fsS https://voenny-kontrakt.ru/ -o /dev/null && echo "сайт OK"
+          curl -fsS https://voenny-kontrakt.ru/health && echo " ← api OK"
