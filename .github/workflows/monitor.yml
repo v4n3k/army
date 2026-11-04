@@ -1,0 +1,68 @@
+name: Monitor
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # каждые 15 минут
+  workflow_dispatch: # ручной запуск из вкладки Actions
+
+concurrency:
+  group: monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Проверка сайта (прямой запрос)
+        id: check
+        run: |
+          ok=0
+          for i in 1 2 3; do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 15 https://voenny-kontrakt.ru/ 2>/dev/null || echo 000)
+            health=$(curl -sS --max-time 15 https://voenny-kontrakt.ru/health 2>/dev/null || echo 'FAIL')
+            echo "попытка $i: главная=$code, /health=$health"
+            if [ "$code" = "200" ] && printf '%s' "$health" | grep -q '"ok"'; then ok=1; break; fi
+            [ $i -lt 3 ] && sleep 20
+          done
+          if [ $ok -eq 1 ]; then
+            echo "result=ok" >> "$GITHUB_OUTPUT"
+            echo "Сайт доступен"
+          else
+            echo "result=fail" >> "$GITHUB_OUTPUT"
+            echo "Сайт НЕ доступен с 3 попыток"
+          fi
+
+      - name: Проверка из России (check-host.net, Москва)
+        if: always()
+        run: |
+          req=$(curl -sS --max-time 20 -H 'Accept: application/json' \
+            'https://check-host.net/check-http?host=https://voenny-kontrakt.ru&node=ru1.node.check-host.net&node=ru2.node.check-host.net')
+          id=$(printf '%s' "$req" | grep -o '"request_id":"[^"]*"' | cut -d'"' -f4)
+          echo "отчёт: https://check-host.net/check-report/$id"
+          sleep 20
+          curl -sS --max-time 20 "https://check-host.net/check-report/$id" \
+            | grep -o 'display("[^"]*", \[\[[^]]*\]\]' \
+            || echo "не удалось получить отчёт check-host (не критично)"
+
+      - name: Самолечение (рестарт nginx по SSH)
+        if: steps.check.outputs.result == 'fail'
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+
+          ssh -o ConnectTimeout=15 -o BatchMode=yes \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+            'systemctl restart nginx && sleep 3 && systemctl is-active nginx && curl -sS -o /dev/null -w "локальный ответ: %{http_code}\n" -k https://127.0.0.1/ -H "Host: voenny-kontrakt.ru"' \
+            || echo "SSH недоступен — сервер не отвечает даже по SSH"
+
+          sleep 5
+          code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 15 https://voenny-kontrakt.ru/ 2>/dev/null || echo 000)
+          if [ "$code" = "200" ]; then
+            echo "::notice::Сайт восстановлен после рестарта nginx"
+          else
+            echo "::error::Сайт недоступен даже после рестарта nginx (код $code). Если SSH отвечал — сделайте ребут сервера в панели aeza; если нет — тикет в поддержку aeza."
+            exit 1
+          fi
