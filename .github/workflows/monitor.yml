@@ -66,3 +66,5 @@ jobs:
             echo "::error::Сайт недоступен даже после рестарта nginx (код $code). Если SSH отвечал — сделайте ребут сервера в панели aeza; если нет — тикет в поддержку aeza."
             exit 1
           fi
+
+# re-push: force workflow registration
