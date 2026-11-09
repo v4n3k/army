@@ -1421,7 +1421,7 @@
 											return location.pathname;
 										}
 									})(),
-									label: 'site_0_gSVO',
+									label: (window.svoMark && window.svoMark()) || 'site_0_gSVO',
 									utm: (window.svoUTM && window.svoUTM()) || null,
 								}),
 							}).catch(function () {});
@@ -1429,14 +1429,8 @@
 						var ok = form.querySelector('.form-ok');
 						if (ok) ok.classList.add('show');
 						form.reset();
-						try {
-							window.open(
-								(window.svoTgUrl && window.svoTgUrl()) ||
-									'https://t.me/Andrey89SVO',
-								'_blank',
-								'noopener',
-							);
-						} catch (err) {}
+						/* Заявка уходит только на сервер (-> Telegram через реле);
+						   в мессенджер не перекидываем. */
 					});
 				});
 
