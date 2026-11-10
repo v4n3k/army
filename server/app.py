@@ -69,6 +69,29 @@ def normalize_phone(raw: str) -> str | None:
     return "+" + digits
 
 
+QUIZ_LABELS = {
+    "возраст": "Возраст",
+    "служил": "Служил раньше",
+    "долги": "Кредиты/долги",
+    "цель": "Что ближе",
+}
+
+
+def quiz_answers(raw: object) -> list[tuple[str, str]]:
+    """Parse the quiz field ("возраст: 26–35; служил: Нет") into label/value pairs."""
+    pairs = []
+    for part in str(raw or "").split(";"):
+        part = part.strip()
+        if not part:
+            continue
+        key, _, value = part.partition(":")
+        key, value = key.strip(), value.strip()
+        if not key or not value:
+            continue
+        pairs.append((QUIZ_LABELS.get(key.lower(), key.capitalize()), value))
+    return pairs
+
+
 def post_with_retries(url: str, data: bytes, headers: dict, label: str) -> bool:
     for attempt in range(3):
         try:
@@ -113,11 +136,14 @@ def notify_telegram(lead: dict) -> None:
 
     name = lead.get("name", "?")
     phone = lead.get("phone", "?")
-    message = "\n".join([
+    lines = [
         "🔥 Новая заявка",
         f"Имя: {name}",
         f"Телефон: {phone}",
-    ])
+    ]
+    for key, value in quiz_answers(lead.get("quiz")):
+        lines.append(f"{key}: {value}")
+    message = "\n".join(lines)
     body = json.dumps({"chat_id": chat_id, "text": message}).encode("utf-8")
     ok = post_with_retries(
         f"{api_url}{token}/sendMessage",
