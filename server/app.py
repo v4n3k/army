@@ -3,13 +3,16 @@
 
 Serves ./site as static files and handles POST /api/lead:
   - validates name/phone, drops honeypot hits and rate-limits by IP;
-  - forwards every lead to Telegram via bot.
+  - forwards every lead to the relay (which sends it to Telegram), or directly
+    to the Telegram bot API when no relay is configured.
 
 Environment:
   HOST                  bind address (default 127.0.0.1)
   PORT                  port (default 8000)
-  TELEGRAM_BOT_TOKEN    bot token from @BotFather
-  TELEGRAM_CHAT_ID      chat_id or @group-name
+  RELAY_URL             URL of the Telegram relay (e.g. http://127.0.0.1:8000/lead)
+  RELAY_SECRET          shared secret for relay auth
+  TELEGRAM_BOT_TOKEN    bot token from @BotFather (direct mode)
+  TELEGRAM_CHAT_ID      chat_id or @group-name (direct mode)
   TELEGRAM_API_URL      optional custom Telegram bot API (default https://api.telegram.org/bot)
 """
 from __future__ import annotations
@@ -66,55 +69,64 @@ def normalize_phone(raw: str) -> str | None:
     return "+" + digits
 
 
+def post_with_retries(url: str, data: bytes, headers: dict, label: str) -> bool:
+    for attempt in range(3):
+        try:
+            req = urllib.request.Request(url, data=data, headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                resp.read()
+            print(f"[{label}] delivered on attempt {attempt + 1}", flush=True)
+            return True
+        except Exception as exc:
+            print(f"[{label}] attempt {attempt + 1} failed: {exc}", flush=True)
+            if attempt < 2:
+                time.sleep(2 ** attempt)  # 1s, 2s между попытками
+    return False
+
+
 def notify_telegram(lead: dict) -> None:
-    """Forward lead directly to Telegram via bot."""
+    """Forward lead to the relay, falling back to the Telegram bot API."""
+    relay_url = os.environ.get("RELAY_URL")
+    secret = os.environ.get("RELAY_SECRET")
+
+    if relay_url and secret:
+        body = json.dumps(lead, ensure_ascii=False).encode("utf-8")
+        ok = post_with_retries(
+            relay_url,
+            body,
+            {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {secret}",
+            },
+            "relay",
+        )
+        if ok:
+            return
+        print("[relay] CRITICAL: all attempts failed, trying direct Telegram", flush=True)
+
     token = os.environ.get("TELEGRAM_BOT_TOKEN")
     chat_id = os.environ.get("TELEGRAM_CHAT_ID")
     api_url = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org/bot")
     if not token or not chat_id:
-        print("[telegram] TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set, skipping", flush=True)
+        print("[telegram] no relay and TELEGRAM_BOT_TOKEN/CHAT_ID not set, lead LOST", flush=True)
         return
 
-    # Prepare message text
     name = lead.get("name", "?")
     phone = lead.get("phone", "?")
-
-    # Build message
-    lines = [
+    message = "\n".join([
         "🆕 Новая заявка",
         f"👤 Имя: {name}",
         f"📞 Телефон: {phone}",
-    ]
-    message = "\n".join(lines)
-
-    # Send to Telegram
-    url = f"{api_url}{token}/sendMessage"
-    payload = {
-        "chat_id": chat_id,
-        "text": message,
-    }
-
-    for attempt in range(3):
-        try:
-            data = json.dumps(payload).encode("utf-8")
-            req = urllib.request.Request(
-                url,
-                data=data,
-                headers={
-                    "Content-Type": "application/json",
-                },
-                method="POST",
-            )
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                resp.read()
-            print(f"[telegram] sent on attempt {attempt + 1}", flush=True)
-            return
-        except Exception as exc:
-            print(f"[telegram] attempt {attempt + 1} failed: {exc}", flush=True)
-            if attempt < 2:
-                time.sleep(2 ** attempt)  # 1s, 2s между попытками
-
-    print("[telegram] CRITICAL: all attempts failed, lead LOST", flush=True)
+    ])
+    body = json.dumps({"chat_id": chat_id, "text": message}).encode("utf-8")
+    ok = post_with_retries(
+        f"{api_url}{token}/sendMessage",
+        body,
+        {"Content-Type": "application/json"},
+        "telegram",
+    )
+    if not ok:
+        print("[telegram] CRITICAL: all attempts failed, lead LOST", flush=True)
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -248,9 +260,12 @@ def main() -> None:
         raise SystemExit(f"site directory not found: {SITE}")
 
     server = ThreadingHTTPServer((host, port), Handler)
-    print(f"http://{host}:{port}  (leads -> Telegram via bot)", flush=True)
-    if not (os.environ.get("TELEGRAM_BOT_TOKEN") and os.environ.get("TELEGRAM_CHAT_ID")):
-        print("WARNING: TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set — leads won't reach Telegram.", flush=True)
+    has_relay = bool(os.environ.get("RELAY_URL") and os.environ.get("RELAY_SECRET"))
+    has_bot = bool(os.environ.get("TELEGRAM_BOT_TOKEN") and os.environ.get("TELEGRAM_CHAT_ID"))
+    target = "relay" if has_relay else "bot" if has_bot else "nowhere"
+    print(f"http://{host}:{port}  (leads -> Telegram via {target})", flush=True)
+    if target == "nowhere":
+        print("WARNING: no RELAY_URL/RELAY_SECRET and no TELEGRAM_BOT_TOKEN/CHAT_ID — leads won't reach Telegram.", flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:
