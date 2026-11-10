@@ -2,3 +2,7 @@
 .preview/
 data/
 server/.env
+# Environment variables (secrets)
+.env
+*.env*
+.env.local
