@@ -114,9 +114,9 @@ def notify_telegram(lead: dict) -> None:
     name = lead.get("name", "?")
     phone = lead.get("phone", "?")
     message = "\n".join([
-        "🆕 Новая заявка",
-        f"👤 Имя: {name}",
-        f"📞 Телефон: {phone}",
+        "🔥 Новая заявка",
+        f"Имя: {name}",
+        f"Телефон: {phone}",
     ])
     body = json.dumps({"chat_id": chat_id, "text": message}).encode("utf-8")
     ok = post_with_retries(
