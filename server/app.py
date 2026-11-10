@@ -76,15 +76,36 @@ def notify_telegram(lead: dict) -> None:
         return
 
     # Prepare message text
+    ts = lead.get("ts", "?")
     name = lead.get("name", "?")
     phone = lead.get("phone", "?")
+    page = lead.get("page", "?")
+    entry = lead.get("entry", "?")
+    label = lead.get("label", "?")
+    utm = lead.get("utm")
+    elapsed = lead.get("elapsed_ms")
+    ip = lead.get("ip", "?")
+    ua = lead.get("ua", "?")
+    quiz = lead.get("quiz")
 
     # Build message
     lines = [
-        "🆕 Новая заявка",
+        f"🆕 Новая заявка",
         f"👤 Имя: {name}",
-        f"📞 Телефон: {phone}",
+        f"📞 Телефон: {phone}"
     ]
+    
+    if elapsed is not None:
+        lines.append(f"⏱️ Время на форме: {elapsed} мс")
+    if utm:
+        utm_str = "\n".join(f"  {k}: {v}" for k, v in utm.items()) if isinstance(utm, dict) else str(utm)
+        lines.append(f"📊 UTM:\n{utm_str}")
+    if quiz:
+        lines.append(f"📝 Квиз:\n{quiz}")
+    lines.extend([
+        f"🌐 IP: {ip}",
+        f"📱 UA: {ua}",
+    ])
     message = "\n".join(lines)
 
     # Send to Telegram
@@ -158,7 +179,6 @@ class Handler(SimpleHTTPRequestHandler):
                     self.wfile.write(body)
                     return
         super().send_error(code, message, explain)
-        
     def do_POST(self) -> None:
         if self.path.split("?")[0] != "/api/lead":
             self.send_json({"ok": False, "error": "not found"}, status=404)
